@@ -2,6 +2,7 @@ from utils import AverageMeter,warmup_learning_rate
 import time
 import torch
 import sys
+from sklearn.metrics import f1_score
 
 def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
     """one epoch training"""
