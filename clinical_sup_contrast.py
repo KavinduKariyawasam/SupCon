@@ -1,6 +1,6 @@
 from config_supcon import parse_option
 from utils_supcon import set_loader,set_model_contrast
-from utils import set_optimizer, adjust_learning_rate,save_model
+from utils import set_optimizer, adjust_learning_rate,save_model, set_loader_new
 import os
 import time
 import tensorboard_logger as tb_logger
@@ -13,11 +13,32 @@ from training_one_epoch_alpha import train_Alpha
 from training_one_epoch_prime import train_Prime
 from training_one_epoch_prime_trex_combined import train_Combined
 
+def submission_generate(test_loader, model, opt):
+    """validation"""
+    model.eval()
+
+    device = opt.device
+    out_list = []
+    with torch.no_grad():
+        for idx, image in (enumerate(val_loader)):
+
+            images = image.float().to(device)
+
+            # forward
+            output = model(images)
+            output = torch.round(torch.sigmoid(output))
+            out_list.append(output.squeeze().detach().cpu().numpy())
+
+
+    out_submisison = np.array(out_list)
+    np.save('output',out_submisison)
+
 def main():
     opt = parse_option()
 
     # build data loader
-    train_loader = set_loader(opt)
+    #train_loader = set_loader(opt)
+    train_loader, test_loader = set_loader(opt)
 
     # build model and criterion
     model, criterion = set_model_contrast(opt)
@@ -49,6 +70,9 @@ def main():
                 opt.save_folder, 'ckpt_epoch_{epoch}.pth'.format(epoch=epoch))
             save_model(model, optimizer, opt, epoch, save_file)
 
+    #Genarating output
+    submission_generate(test_loader, model, opt)
+    
     # save the last model
     save_file = os.path.join(
         opt.save_folder, 'last.pth')
