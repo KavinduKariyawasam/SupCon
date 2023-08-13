@@ -14,8 +14,8 @@ class OCTDataset(data.Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.img_dir,
-                                self.df.iloc[idx, 1], self.df.iloc[idx, 0])
+        #img_path = os.path.join(self.img_dir,self.df.iloc[idx, 1], self.df.iloc[idx, 0])
+        img_path = self.img_dir + self.df.iloc[idx,0]
         im = Image.open(img_path).convert("L")
 
         image = self.transforms(im)
