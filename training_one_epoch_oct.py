@@ -66,5 +66,7 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
                    epoch, idx + 1, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
             sys.stdout.flush()
-
+    f = f1_score(label_array.astype(int),output_array.astype(int),average='macro')
+    print(f"Epoch: {epoch}, Loss: {losses.avg:.4f}, F1 Score: {f:.4f}")
+    
     return losses.avg
