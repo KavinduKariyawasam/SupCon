@@ -178,6 +178,35 @@ class SupConResNet(nn.Module):
         feat = F.normalize(self.head(feat), dim=1)
         return feat
 
+class SupConResNet_Small(nn.Module):
+    """backbone + projection head"""
+    def __init__(self, name='resnet50', head='mlp', feat_dim=128):
+        super(SupConResNet_Small, self).__init__()
+        model_fun, dim_in = model_dict[name]
+        resnet = models.resnet50(pretrained=False)
+
+        resnet.conv1 = nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+        resnet.fc = nn.Flatten()
+
+        self.encoder = resnet
+        if head == 'linear':
+            self.head = nn.Linear(dim_in, feat_dim)
+        elif head == 'mlp':
+            self.head = nn.Sequential(
+                nn.Linear(dim_in, dim_in),
+                nn.ReLU(inplace=True),
+                nn.Linear(dim_in, feat_dim)
+            )
+        else:
+            raise NotImplementedError(
+                'head not supported: {}'.format(head))
+
+    def forward(self, x):
+        feat = self.encoder(x)
+
+        feat = F.normalize(self.head(feat), dim=1)
+        return feat
+
 class SupCEResNet(nn.Module):
     """encoder + classifier"""
     def __init__(self, name='resnet50', num_classes=2):
@@ -193,6 +222,59 @@ class SupCEResNet(nn.Module):
     def forward(self, x):
 
         return self.fc(self.encoder(x))
+
+class SupCEResNet_MultiLabel(nn.Module):
+    """encoder + classifier"""
+    def __init__(self, name='resnet50', num_classes=2):
+        super(SupCEResNet_MultiLabel, self).__init__()
+        model_fun, dim_in = model_dict[name]
+        self.encoder = model_fun()
+        self.fc = nn.Linear(dim_in, num_classes)
+        self.head = nn.Sequential(
+            nn.Linear(dim_in, dim_in),
+            nn.ReLU(inplace=True),
+            nn.Linear(dim_in, 128)
+        )
+        self.sigm = nn.Sigmoid()
+    def forward(self, x):
+
+        return self.fc(self.encoder(x))
+class SupCEResNet_Fusion(nn.Module):
+    """encoder + classifier"""
+    def __init__(self, name='resnet50', num_classes=2):
+        super(SupCEResNet_Fusion, self).__init__()
+        model_fun, dim_in = model_dict[name]
+        self.encoder = model_fun()
+        self.fc = nn.Linear(dim_in+4, num_classes)
+
+        self.head = nn.Sequential(
+            nn.Linear(dim_in, dim_in),
+            nn.ReLU(inplace=True),
+            nn.Linear(dim_in, 128)
+        )
+    def forward(self, x, label_vector):
+
+        label_vector = (label_vector - torch.min(label_vector))/(torch.max(label_vector) - torch.min(label_vector))
+        return self.fc(torch.cat((label_vector,self.encoder(x)),dim=1))
+
+class SupCEResNet_Small(nn.Module):
+    """encoder + classifier"""
+    def __init__(self, name='resnet50', num_classes=2):
+        super(SupCEResNet_Small, self).__init__()
+        model_fun, dim_in = model_dict[name]
+        resnet = models.resnet50(pretrained=False)
+        resnet.conv1 = nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+        resnet.fc = nn.Linear(dim_in, num_classes)
+        self.encoder = resnet
+        self.head = nn.Sequential(
+            nn.Linear(dim_in, dim_in),
+            nn.ReLU(inplace=True),
+            nn.Linear(dim_in, 128)
+        )
+    def forward(self, x):
+
+        return self.encoder(x)
+
 
 class LinearClassifier(nn.Module):
     """Linear classifier"""
