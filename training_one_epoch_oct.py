@@ -64,7 +64,7 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
 
         #NEW
         label_list.append(labels.squeeze().detach().cpu().numpy())
-        output_list.append(((torch.sigmoid(output)>=0.5)*1).squeeze().detach().cpu().numpy())
+        output_list.append(((torch.sigmoid(features)>=0.5)*1).squeeze().detach().cpu().numpy())
 
         # print info
         if (idx + 1) % opt.print_freq == 0:
