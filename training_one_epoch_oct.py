@@ -13,9 +13,6 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
     losses = AverageMeter()
     device = opt.device
     end = time.time()
-
-    label_list = []
-    output_list = []
     
     for idx, (images, labels,patient) in enumerate(train_loader):
         data_time.update(time.time() - end)
@@ -29,7 +26,6 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
         # warm-up learning rate
         warmup_learning_rate(opt, epoch, idx, len(train_loader), optimizer)
 
-        output = model(images)
         # compute loss
         features = model(images)
         f1, f2 = torch.split(features, [bsz, bsz], dim=0)
@@ -63,10 +59,6 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        #NEW
-        label_list.append(labels.squeeze().detach().cpu().numpy())
-        output_list.append(((torch.sigmoid(output)>=0.5)*1).squeeze().detach().cpu().numpy())
-
         # print info
         if (idx + 1) % opt.print_freq == 0:
             print('Train: [{0}][{1}/{2}]\t'
@@ -76,10 +68,5 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
                    epoch, idx + 1, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
             sys.stdout.flush()
-
-    label_array = np.concatenate(label_list,axis = 0)
-    output_array = np.concatenate(output_list,axis = 0)
-    f = f1_score(label_array.astype(int),output_array.astype(int),average='macro')
-    print(f"Epoch: {epoch}, Loss: {losses.avg:.4f}, F1 Score: {f:.4f}")
     
     return losses.avg
