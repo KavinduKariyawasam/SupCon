@@ -71,7 +71,7 @@ def main():
             save_model(model, optimizer, opt, epoch, save_file)
 
     #Genarating output
-    submission_generate(test_loader, model, opt)
+    #submission_generate(test_loader, model, opt)
     
     # save the last model
     save_file = os.path.join(
