@@ -43,7 +43,7 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
             loss = criterion(features)
         else:
             raise ValueError('contrastive method not supported: {}'.
-                             format(opt.method))
+                             format(opt.method1))
 
         # update metric
         losses.update(loss.item(), bsz)
