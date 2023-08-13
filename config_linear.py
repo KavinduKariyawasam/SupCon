@@ -92,6 +92,9 @@ def parse_option():
 
     if opt.dataset == 'Prime':
         opt.n_cls = 2
+
+    elif opt.dataset == 'OCT':
+        opt.n_cls = 2
     else:
         raise ValueError('dataset not supported: {}'.format(opt.dataset))
 
