@@ -29,6 +29,7 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
         # warm-up learning rate
         warmup_learning_rate(opt, epoch, idx, len(train_loader), optimizer)
 
+        output = model(images)
         # compute loss
         features = model(images)
         f1, f2 = torch.split(features, [bsz, bsz], dim=0)
@@ -64,7 +65,7 @@ def train_OCT(train_loader, model, criterion, optimizer, epoch, opt):
 
         #NEW
         label_list.append(labels.squeeze().detach().cpu().numpy())
-        output_list.append(((torch.sigmoid(features)>=0.5)*1).squeeze().detach().cpu().numpy())
+        output_list.append(((torch.sigmoid(output)>=0.5)*1).squeeze().detach().cpu().numpy())
 
         # print info
         if (idx + 1) % opt.print_freq == 0:
