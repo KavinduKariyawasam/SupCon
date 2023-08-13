@@ -75,10 +75,21 @@ def train_supervised(train_loader, model,criterion, optimizer, epoch, opt):
     device = opt.device
     end = time.time()
 
-    for idx, (image, vit_deb,ir_hrf, full_vit,partial_vit,fluid_irf,drt,eye_id,bcva,cst,patient) in enumerate(train_loader):
+    #for idx, (image, vit_deb,ir_hrf, full_vit,partial_vit,fluid_irf,drt,eye_id,bcva,cst,patient) in enumerate(train_loader):
+    for idx, (image, vit_deb,ir_hrf) in enumerate(train_loader):
+        print(f"Batch {batch_idx}:")
+        print(f"Image shape: {image.shape}")
+        print(f"Vit_deb shape: {vit_deb.shape}")
+        print(f"IR_HRF shape: {ir_hrf.shape}")
+        # ... continue printing shapes for other variables
+        print("\n")
+        
         data_time.update(time.time() - end)
 
         images = image.to(device)
+
+        #For individual bio markers
+        '''
         if (opt.biomarker == 'vit_deb'):
             labels = vit_deb
         elif (opt.biomarker == 'ir_hrf'):
@@ -91,6 +102,8 @@ def train_supervised(train_loader, model,criterion, optimizer, epoch, opt):
             labels = drt
         else:
             labels = fluid_irf
+        '''
+        
         labels = labels.long()
 
         labels = labels.to(device)
