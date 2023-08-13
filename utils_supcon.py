@@ -7,7 +7,7 @@ from prime_trex_combined import CombinedDataset
 #from recovery import recovery
 from trex import TREX
 
-from oct_cluster import OCTDatasetCluster
+#from oct_cluster import OCTDatasetCluster
 import torch
 from resnet import SupConResNet
 from loss import SupConLoss
