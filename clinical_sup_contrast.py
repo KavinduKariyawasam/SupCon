@@ -38,7 +38,7 @@ def main():
 
     # build data loader
     #train_loader = set_loader(opt)
-    train_loader, test_loader = set_loader(opt)
+    train_loader, test_loader = set_loader_new(opt)
 
     # build model and criterion
     model, criterion = set_model_contrast(opt)
