@@ -49,9 +49,10 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
+        
         #Accuracy 
-        correct_count = torch.sum((labels == output)*1)
+        pred_labels = ((torch.sigmoid(output)>=0.5)*1)
+        correct_count = torch.sum((labels == pred_labels)*1).detach().cpu().item()
         total_count =  torch.numel(labels)
         correct.update(1,correct_count)
         total.update(1,total_count)
@@ -59,7 +60,7 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
-        print(output)
+        print(pred_labels)
         break
         #print(correct.count,total.count)
         # print info
