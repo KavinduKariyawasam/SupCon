@@ -3,6 +3,7 @@ from utils import AverageMeter,warmup_learning_rate
 import sys
 import time
 import numpy as np
+from utils_supcon import set_loader
 from config_linear import parse_option
 from utils import set_loader_new, set_model, set_optimizer, adjust_learning_rate, accuracy_multilabel
 from sklearn.metrics import average_precision_score,roc_auc_score
