@@ -15,7 +15,10 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
-    top1 = AverageMeter()
+    #top1 = AverageMeter()
+    correct = AverageMeter()
+    total = AverageMeter()
+    
     device = opt.device
     end = time.time()
     #for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(train_loader):
@@ -47,6 +50,12 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         loss.backward()
         optimizer.step()
 
+        #Accuracy 
+        correct_count = torch.sum((labels == output)*1)
+        total_count =  torch.numel(labels)
+        correct.update(1,correct_count)
+        total.update(1,total_count)
+        
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
@@ -57,7 +66,7 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
                 epoch, idx + 1, len(train_loader)))
             sys.stdout.flush()
 
-    return losses.avg, top1.avg
+    return losses.avg, correct.count/total.count
 
 def validate_multilabel(val_loader, model, classifier, criterion, opt):
     """validation"""
