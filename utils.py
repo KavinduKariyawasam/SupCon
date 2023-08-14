@@ -30,8 +30,7 @@ def set_model(opt):
     elif(opt.multi == 1 and opt.super!=3):
         model = SupConResNet(name=opt.model)
         criterion = torch.nn.BCELoss()
-
-        classifier = LinearClassifier_MultiLabel(name=opt.model, num_classes=5)
+        classifier = LinearClassifier_MultiLabel(name=opt.model, num_classes=6)
     ckpt = torch.load(opt.ckpt, map_location='cpu')
     state_dict = ckpt['model']
     device = opt.device
