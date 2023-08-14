@@ -108,7 +108,7 @@ def set_loader_new(opt):
     
     test_loader = torch.utils.data.DataLoader(
         test_dataset, batch_size=10, shuffle=True,
-        num_workers=0, pin_memory=True,drop_last=dl)
+        num_workers=0, pin_memory=True,drop_last=False)     #drop_last = dl edited
 
     return train_loader, test_loader
 
