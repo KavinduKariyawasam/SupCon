@@ -17,7 +17,8 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
     top1 = AverageMeter()
     device = opt.device
     end = time.time()
-    for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(train_loader):
+    #for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(train_loader):
+    for idx, (image, bio_tensor,patient) in enumerate(train_loader):        #edited
         data_time.update(time.time() - end)
 
         images = image.to(device)
