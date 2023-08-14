@@ -9,7 +9,7 @@ from sklearn.metrics import roc_auc_score
 from resnet import  SupConResNet,LinearClassifier,LinearClassifier_MultiLabel
 import torch.backends.cudnn as cudnn
 from torchvision import transforms, datasets
-from oct_dataset import OCTDataset
+from oct_dataset import OCTDataset,BIOMARKERS
 from biomarker import BiomarkerDatasetAttributes
 from biomarker_multi import BiomarkerDatasetAttributes_MultiLabel
 from biomarker_fusion import BiomarkerDatasetAttributes_Fusion
@@ -89,7 +89,7 @@ def set_loader_new(opt):
         csv_path_test = opt.test_csv_path
         data_path_train = opt.train_image_path
         data_path_test = opt.test_image_path
-        train_dataset = OCTDataset(csv_path_train,data_path_train,transforms = train_transform)
+        train_dataset = BIOMARKERS(csv_path_train,data_path_train,transforms = train_transform)
         test_dataset = OCTDataset(csv_path_test,data_path_test,transforms = train_transform)
     else:
         raise ValueError(opt.dataset)
