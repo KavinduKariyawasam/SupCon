@@ -142,9 +142,9 @@ def main_multilabel():
                 epoch, time2 - time1, acc))
 
     # eval for one epoch
-        loss, test_acc, par_vit, full_vit, ir_hrf,dme, fluid_irf,overall = validate_multilabel(test_loader, model, classifier, criterion, opt)
+       # loss, test_acc, par_vit, full_vit, ir_hrf,dme, fluid_irf,overall = validate_multilabel(test_loader, model, classifier, criterion, opt)
 
-        acc_list.append(test_acc)
+       # acc_list.append(test_acc)
 
 
     with open(opt.results_dir, "a") as file:
