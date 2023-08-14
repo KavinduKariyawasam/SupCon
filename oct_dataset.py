@@ -2,6 +2,7 @@ import torch.utils.data as data
 import os
 from PIL import Image
 import pandas as pd
+import numpy as np
 
 class OCTDataset(data.Dataset):
     def __init__(self, df, img_dir, transforms):
