@@ -97,18 +97,16 @@ def set_loader_new(opt):
         train_dataset, batch_size=opt.batch_size, shuffle=True,
         num_workers=opt.num_workers, pin_memory=True)
 
-    '''  #Edited
     if(opt.biomarker == 'drt' and opt.patient_split == 1):
         dl = True
     elif(opt.multi == 1):
         dl = True
     else:
         dl=False
-    '''
     
     test_loader = torch.utils.data.DataLoader(
         test_dataset, batch_size=10, shuffle=True,
-        num_workers=0, pin_memory=True,drop_last=False)     #drop_last = dl edited
+        num_workers=0, pin_memory=True,drop_last=dl) 
 
     return train_loader, test_loader
 
