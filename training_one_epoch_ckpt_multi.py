@@ -60,8 +60,8 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
-        print(pred_labels)
-        break
+        #print(pred_labels)
+        #break
         #print(correct.count,total.count)
         # print info
         if (idx + 1) % opt.print_freq == 0:
