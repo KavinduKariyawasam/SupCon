@@ -120,7 +120,9 @@ def main_multilabel():
 
     # build data loader
     device = opt.device
-    train_loader,  test_loader = set_loader_new(opt)
+    
+    #train_loader,  test_loader = set_loader_new(opt)
+    train_loader = set_loader(opt)
 
     acc_list = []
     prec_list = []
