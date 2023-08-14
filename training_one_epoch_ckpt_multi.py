@@ -36,6 +36,9 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
 
         output = classifier(features.detach())
 
+        print(output.shape)
+        print(labels.shape)
+        
         loss = criterion(output, labels)
 
         # update metric
