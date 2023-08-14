@@ -35,9 +35,6 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
             features = model.encoder(images)
 
         output = classifier(features.detach())
-
-        print(output.shape)
-        print(labels.shape)
         
         loss = criterion(output, labels)
 
