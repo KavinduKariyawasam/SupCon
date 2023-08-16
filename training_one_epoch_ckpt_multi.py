@@ -74,7 +74,7 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
 
     return losses.avg, correct.count/total.count
 
-def submission_generate(val_loader, model, opt):
+def submission_generate(val_loader, model, classifier, opt):
     """validation"""
     model.eval()
     classifier.eval()
@@ -185,11 +185,12 @@ def main_multilabel():
                 epoch, time2 - time1, acc))
 
     # eval for one epoch
-        loss, r,overall = validate_multilabel(test_loader, model, classifier, criterion, opt)
+        #loss, r,overall = validate_multilabel(test_loader, model, classifier, criterion, opt)
 
-        acc_list.append(test_acc)
+        #acc_list.append(test_acc)
+        submission_generate(test_loader, model, classifier, opt)
 
-
+    '''
     with open(opt.results_dir, "a") as file:
         # Writing data to a file
         file.write(opt.ckpt + '\n')
@@ -202,3 +203,4 @@ def main_multilabel():
         file.write('DME: ' + str(dme) + '\n')
         file.write('Fluid_irf: ' + str(fluid_irf) + '\n')
         file.write('Overall: ' + str(overall) + '\n')
+    '''
