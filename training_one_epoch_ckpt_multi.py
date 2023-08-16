@@ -21,8 +21,6 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
     
     device = opt.device
     end = time.time()
-
-    output_list = []
     
     #for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(train_loader):
     for idx, (image, bio_tensor) in enumerate(train_loader):        #edited
@@ -54,13 +52,13 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         optimizer.step()
 
         #Accuracy 
-        output_list.append(((torch.sigmoid(output)>=0.5)*1).squeeze().detach().cpu().numpy())
-        pred_labels = ((torch.sigmoid(output)>=0.5)*1)
+        #pred_labels = ((torch.sigmoid(output)>=0.5)*1)
+        pred_labels = torch.nn.Sigmoid(output)
         correct_count = torch.sum((labels == pred_labels)*1).detach().cpu().item()
         total_count =  torch.numel(labels)
         correct.update(1,correct_count)
         total.update(1,total_count)
-        print(output_list)
+        print(pred_labels)
                 
         # measure elapsed time
         batch_time.update(time.time() - end)
