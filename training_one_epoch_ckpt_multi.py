@@ -58,7 +58,7 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         total_count =  torch.numel(labels)
         correct.update(1,correct_count)
         total.update(1,total_count)
-        print(pred_labels)
+        #print(pred_labels)
                 
         # measure elapsed time
         batch_time.update(time.time() - end)
