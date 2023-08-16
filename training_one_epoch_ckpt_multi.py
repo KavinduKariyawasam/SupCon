@@ -88,7 +88,7 @@ def submission_generate(val_loader, model, classifier, opt):
 
             # forward
             output = classifier(model.encoder(images))
-            #output = torch.round(torch.sigmoid(output))
+            output = torch.round(torch.sigmoid(output))
             out_list.append(output.squeeze().detach().cpu().numpy())
 
 
