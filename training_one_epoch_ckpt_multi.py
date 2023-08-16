@@ -6,7 +6,7 @@ import numpy as np
 from utils_supcon import set_loader
 from config_linear import parse_option
 from utils import set_loader_new, set_model, set_optimizer, adjust_learning_rate, accuracy_multilabel
-from sklearn.metrics import average_precision_score,roc_auc_score
+from sklearn.metrics import average_precision_score,roc_auc_score,f1_score
 
 def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, epoch, opt):
     """one epoch training"""
@@ -74,6 +74,28 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
 
     return losses.avg, correct.count/total.count
 
+def submission_generate(val_loader, model, opt):
+    """validation"""
+    model.eval()
+    classifier.eval()
+
+    device = opt.device
+    out_list = []
+    with torch.no_grad():
+        for idx, image in (enumerate(val_loader)):
+
+            images = image.float().to(device)
+
+            # forward
+            output = classifier(model.encoder(images))
+            #output = torch.round(torch.sigmoid(output))
+            out_list.append(output.squeeze().detach().cpu().numpy())
+
+
+    out_submisison = np.array(out_list)
+    np.save('output',out_submisison)
+
+
 def validate_multilabel(val_loader, model, classifier, criterion, opt):
     """validation"""
     model.eval()
@@ -86,7 +108,8 @@ def validate_multilabel(val_loader, model, classifier, criterion, opt):
     out_list = []
     with torch.no_grad():
         end = time.time()
-        for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(val_loader):
+        #for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(val_loader):
+        for idx, (image, bio_tensor) in enumerate(val_loader):
             images = image.float().to(device)
 
             labels = bio_tensor
@@ -114,22 +137,24 @@ def validate_multilabel(val_loader, model, classifier, criterion, opt):
 
     out_array = np.concatenate(out_list, axis=0)
     r = roc_auc_score(label_array, out_array, multi_class='ovr',average='weighted')
+    f1 = f1_score(label_array, out_array, average='micro')
 
 
+    b6 = f1_score(label_array[:, 5], out_array[:, 5], average='micro')
+    b5 = f1_score(label_array[:, 4], out_array[:, 4], average='micro')
+    b4 = f1_score(label_array[:, 3], out_array[:, 3], average='micro')
+    b3 = f1_score(label_array[:, 2], out_array[:, 2], average='micro')
+    b2 = f1_score(label_array[:, 1], out_array[:, 1], average='micro')
+    b1 = f1_score(label_array[:, 0], out_array[:, 0], average='micro')
 
-    par_vit = average_precision_score(label_array[:, 4], out_array[:, 4], average='micro')
-    full_vit = average_precision_score(label_array[:, 3], out_array[:, 3], average='micro')
-    ir_hrf = average_precision_score(label_array[:, 2], out_array[:, 2], average='micro')
-    dme = average_precision_score(label_array[:, 1], out_array[:, 1], average='micro')
-    fluid_irf = average_precision_score(label_array[:, 0], out_array[:, 0], average='micro')
-
-    overall = (par_vit + full_vit + ir_hrf + dme + fluid_irf) / 5
-    print('Partial_Vit ' + str(average_precision_score(label_array[:, 4], out_array[:, 4], average='micro')))
-    print('Full_Vit ' + str(average_precision_score(label_array[:, 3], out_array[:, 3], average='micro')))
-    print('IR HRF ' + str(average_precision_score(label_array[:, 2], out_array[:, 2], average='micro')))
-    print('DME ' + str(average_precision_score(label_array[:, 1], out_array[:, 1], average='micro')))
-    print('Fluid IRF ' + str(average_precision_score(label_array[:, 0], out_array[:, 0], average='micro')))
-    return losses.avg, r, par_vit, full_vit, ir_hrf,dme, fluid_irf,overall
+    overall = (b1+b2+b3+b4+b5+b6) / 6
+    #print('Partial_Vit ' + str(average_precision_score(label_array[:, 4], out_array[:, 4], average='micro')))
+    #print('Full_Vit ' + str(average_precision_score(label_array[:, 3], out_array[:, 3], average='micro')))
+    #print('IR HRF ' + str(average_precision_score(label_array[:, 2], out_array[:, 2], average='micro')))
+    #print('DME ' + str(average_precision_score(label_array[:, 1], out_array[:, 1], average='micro')))
+    #print('Fluid IRF ' + str(average_precision_score(label_array[:, 0], out_array[:, 0], average='micro')))
+    print(overall, f1)
+    return losses.avg, r, overall
 def main_multilabel():
     best_acc = 0
     opt = parse_option()
@@ -160,9 +185,9 @@ def main_multilabel():
                 epoch, time2 - time1, acc))
 
     # eval for one epoch
-       # loss, test_acc, par_vit, full_vit, ir_hrf,dme, fluid_irf,overall = validate_multilabel(test_loader, model, classifier, criterion, opt)
+        loss, r,overall = validate_multilabel(test_loader, model, classifier, criterion, opt)
 
-       # acc_list.append(test_acc)
+        acc_list.append(test_acc)
 
 
     with open(opt.results_dir, "a") as file:
