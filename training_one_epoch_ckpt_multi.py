@@ -50,8 +50,9 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         loss.backward()
         optimizer.step()
 
+        print(output)
         #Accuracy 
-        pred_labels = ((torch.sigmoid(output)>=0.5)*1).squeeze().detach().cpu().numpy()
+        pred_labels = ((torch.sigmoid(output)>=0.5)*1)
         correct_count = torch.sum((labels == pred_labels)*1).detach().cpu().item()
         total_count =  torch.numel(labels)
         correct.update(1,correct_count)
