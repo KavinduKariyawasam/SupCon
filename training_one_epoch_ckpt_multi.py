@@ -22,7 +22,9 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
     
     device = opt.device
     end = time.time()
-    
+
+    output_list = []
+    label_list = []
     #for idx, (image, bio_tensor,eye_id,bcva,cst,patient) in enumerate(train_loader):
     for idx, (image, bio_tensor) in enumerate(train_loader):        #edited
         data_time.update(time.time() - end)
@@ -63,14 +65,18 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
-        #print(pred_labels)
-        #break
-        #print(correct.count,total.count)
+
+        label_list.append(labels.squeeze().detach().cpu().numpy())
+        output_list.append(pred_labels.squeeze().detach().cpu().numpy())
+        
         # print info
         if (idx + 1) % opt.print_freq == 0:
             print('Train: [{0}][{1}/{2}]\t'.format(
                 epoch, idx + 1, len(train_loader)))
             sys.stdout.flush()
+
+    f = f1_score(label_array.astype(int),output_array.astype(int),average='macro')
+    print(f"Epoch: {epoch}, Loss: {losses.avg:.4f}, F1 Score: {f:.4f}")
 
     return losses.avg, correct.count/total.count
 
