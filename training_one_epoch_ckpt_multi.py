@@ -7,9 +7,7 @@ from utils_supcon import set_loader
 from config_linear import parse_option
 from utils import set_loader_new, set_model, set_optimizer, adjust_learning_rate, accuracy_multilabel
 from sklearn.metrics import average_precision_score,roc_auc_score
-def sigmoid(x):
-    out = 1 / (1 + np.exp(-x))
-    return out
+
 def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, epoch, opt):
     """one epoch training"""
     model.eval()
@@ -55,8 +53,7 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
         optimizer.step()
 
         #Accuracy         
-        #pred_labels = ((torch.sigmoid(output)>=0.5)*1)
-        pred_labels = np.where(sigmoid(output) >= 0.5, 1, 0)
+        pred_labels = ((torch.sigmoid(output)>=0.5)*1)
         correct_count = torch.sum((labels == pred_labels)*1).detach().cpu().item()
         total_count =  torch.numel(labels)
         correct.update(1,correct_count)
