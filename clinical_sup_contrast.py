@@ -58,6 +58,9 @@ def main():
 
         if (opt.dataset == 'OCT'):
             loss = train_OCT(train_loader, model, criterion, optimizer, epoch, opt)
+        elif(opt.dataset == 'Prime_TREX_DME_Fixed' or opt.dataset == 'Prime_TREX_DME_Discrete') \
+                or opt.dataset == 'Patient_Split_2_Prime_TREX' or opt.dataset == 'Patient_Split_3_Prime_TREX':
+            loss = train_Combined(train_loader, model, criterion, optimizer, epoch, opt)
         time2 = time.time()
         print('epoch {}, total time {:.2f}'.format(epoch, time2 - time1))
 
