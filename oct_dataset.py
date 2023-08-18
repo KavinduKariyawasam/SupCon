@@ -48,7 +48,7 @@ class BIOMARKERS(data.Dataset):
         bio_tensor = torch.tensor([b1, b2, b3, b4, b5, b6])
         return image, bio_tensor
 
-class TREX(data.Dataset):                                #new class created
+class TREX_NEW(data.Dataset):                                #new class created
     def __init__(self,df, img_dir, transforms):
         self.img_dir = img_dir
         self.transforms = transforms
