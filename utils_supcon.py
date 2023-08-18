@@ -1,5 +1,5 @@
 from torchvision import transforms, datasets
-from oct_dataset import OCTDataset
+from oct_dataset import OCTDataset, TREX_NEW
 from biomarker import BiomarkerDatasetAttributes
 from utils import TwoCropTransform
 from prime import PrimeDatasetAttributes
@@ -86,7 +86,7 @@ def set_loader(opt):
     elif opt.dataset == 'Prime_TREX_DME_Fixed':      #edited prime_trex part
         csv_path_train = opt.train_csv_path
         data_path_train = opt.train_image_path
-        train_dataset = TREX(csv_path_train,data_path_train,transforms = TwoCropTransform(train_transform))
+        train_dataset = TREX_NEW(csv_path_train,data_path_train,transforms = TwoCropTransform(train_transform))
     else:
         raise ValueError(opt.dataset)
     train_sampler = None
