@@ -79,7 +79,7 @@ def set_loader(opt):
 
 
 
-    if opt.dataset =='OCT':
+    if opt.dataset =='OCT' or opt.dataset == 'Prime_TREX_DME_Fixed':        #edited prime_trex part
         csv_path_train = opt.train_csv_path
         data_path_train = opt.train_image_path
         train_dataset = OCTDataset(csv_path_train,data_path_train,transforms = TwoCropTransform(train_transform))
