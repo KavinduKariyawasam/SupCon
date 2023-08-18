@@ -57,11 +57,10 @@ class TREX(data.Dataset):                                #new class created
         return len(self.df)
 
     def __getitem__(self, idx):
-        path = self.img_dir + self.df.iloc[idx,0]
-        image = Image.open(path).convert("L")
-        image = np.array(image)
-        image = Image.fromarray(image)
-        image = self.transforms(image)
+        img_path = self.img_dir + self.df.iloc[idx,0]
+        im = Image.open(img_path).convert("L")
+
+        image = self.transforms(im)
         bcva = self.df.iloc[idx,1]
         cst = self.df.iloc[idx,2]
         eye_id = self.df.iloc[idx,3]
