@@ -94,8 +94,8 @@ def submission_generate(val_loader, model, classifier, opt):
 
             # forward
             output = classifier(model.encoder(images))
-            output = ((output)>=0.5)*1        #threshold = 0.5
-            #output = torch.round(torch.sigmoid(output))
+            #output = ((output)>=0.5)*1        #threshold = 0.5
+            output = torch.round(torch.sigmoid(output))
             out_list.append(output.squeeze().detach().cpu().numpy())
 
 
