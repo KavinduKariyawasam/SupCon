@@ -52,6 +52,11 @@ def set_loader(opt):
 
         mean = (.1706)
         std = (.2112)
+    elif opt.dataset == 'TREX_DME' or opt.dataset == 'Prime_TREX_DME_Fixed' \
+            or opt.dataset == 'Prime_TREX_Alpha' or opt.dataset == 'Prime_TREX_DME_Discrete' \
+            or opt.dataset == 'Patient_Split_2_Prime_TREX' or opt.dataset == 'Patient_Split_3_Prime_TREX':
+        mean = (.1706)
+        std = (.2112)
     elif opt.dataset == 'path':
 
         mean = eval(opt.mean)
