@@ -21,7 +21,7 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
             images = images.to(device)
 
         bsz = bcva.shape[0]
-
+        print(bcva)
         # warm-up learning rate
         warmup_learning_rate(opt, epoch, idx, len(train_loader), optimizer)
 
