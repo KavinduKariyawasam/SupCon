@@ -137,7 +137,7 @@ class SupConLoss(nn.Module):
         # for numerical stability
         logits_max, _ = torch.max(anchor_dot_contrast, dim=1, keepdim=True)
 
-        logits = anchor_dot_contrast  #- logits_max.detach()
+        logits = anchor_dot_contrast - logits_max.detach()
 
         # tile mask
         mask = mask.repeat(anchor_count, contrast_count)
@@ -153,7 +153,7 @@ class SupConLoss(nn.Module):
         mask = mask * logits_mask
 
         # compute log_prob
-        exp_logits = torch.exp(logits*logits_mask) * logits_mask
+        exp_logits = torch.exp(logits) * logits_mask
         log_prob = torch.log(exp_logits.sum(1, keepdim=True))
         
         #log_prob = logits - torch.log(exp_logits.sum(1, keepdim=True))
