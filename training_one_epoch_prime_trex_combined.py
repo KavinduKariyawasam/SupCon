@@ -14,7 +14,7 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
     end = time.time()
     for idx, (images, bcva,cst,eye_id,patient) in enumerate(train_loader):
         data_time.update(time.time() - end)
-        print(bcva.shape)
+        print(bcva.shape, images[0].shape)
         images = torch.cat([images[0], images[1]], dim=0)
 
         if torch.cuda.is_available():
