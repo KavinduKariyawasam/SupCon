@@ -3,7 +3,7 @@ from __future__ import print_function
 import torch
 import torch.nn as nn
 class SupConLoss(nn.Module):
-    def __init__(self,device='cuda:0', temperature=10, contrast_mode='all',
+    def __init__(self,device='cuda:0', temperature=0.07, contrast_mode='all',
                  base_temperature=0.07):
         super(SupConLoss, self).__init__()
         self.temperature = temperature
