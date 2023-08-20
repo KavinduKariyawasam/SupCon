@@ -16,7 +16,7 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
         data_time.update(time.time() - end)
         print(bcva.shape, images[0].shape)
         images = torch.cat([images[0], images[1]], dim=0)
-
+        print(images.shape)
         if torch.cuda.is_available():
             images = images.to(device)
 
