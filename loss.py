@@ -155,7 +155,7 @@ class SupConLoss(nn.Module):
         # compute log_prob
         exp_logits = (torch.exp(logits) * logits_mask) + 1e-8
         log_prob = torch.log(exp_logits.sum(1, keepdim=True))
-        print(exp_logits, log_prob)
+        #print(exp_logits, log_prob)
         
         #log_prob = logits - torch.log(exp_logits.sum(1, keepdim=True))
 
@@ -163,6 +163,7 @@ class SupConLoss(nn.Module):
         log_num = mask*torch.log(exp_logits)
         log_div = log_num - log_prob
         mean_log_prob_pos = log_div.sum(1) / mask.sum(1)
+        print(mean_log_prob_pos)
 
         # loss
         loss = - (self.temperature / self.base_temperature) * mean_log_prob_pos
