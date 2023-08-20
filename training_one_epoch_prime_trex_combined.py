@@ -27,9 +27,7 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
         # compute loss
         features = model(images)
         f1, f2 = torch.split(features, [bsz, bsz], dim=0)
-        print(features.shape, f1.shape)
         features = torch.cat([f1.unsqueeze(1), f2.unsqueeze(1)], dim=1)
-        print(features.shape)
 
         #Method 1
 
@@ -39,11 +37,11 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
             labels1 = bcva.cuda()
         elif opt.method1 == 'cst':
             labels1 = cst.cuda()
-
         elif opt.method1 == 'eye_id':
             labels1 = eye_id.cuda()
         else:
             labels1 = 'Null'
+        
         # Method 2
         if opt.method2 == 'patient':
             labels2 = patient.cuda()
@@ -51,11 +49,11 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
             labels2 = bcva.cuda()
         elif opt.method2 == 'cst':
             labels2 = cst.cuda()
-
         elif opt.method2 == 'eye_id':
             labels2 = eye_id.cuda()
         else:
             labels2 = 'Null'
+            
         # Method 3
         if opt.method3 == 'patient':
             labels3 = patient.cuda()
@@ -96,10 +94,7 @@ def train_Combined(train_loader, model, criterion, optimizer, epoch, opt):
         if(opt.num_methods == 0):
             loss = criterion(features)
         elif(opt.num_methods==1):
-
-
             loss = criterion(features,labels1)
-
         elif(opt.num_methods == 2):
             loss = criterion(features,labels1) + criterion(features,labels2)
         elif(opt.num_methods == 3):
