@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import torch
 import torch.nn as nn
-'''
+
 class SupConLoss(nn.Module):
     def __init__(self,device='cuda:0', temperature=0.07, contrast_mode='all',
                  base_temperature=0.07):
@@ -170,3 +170,4 @@ class SupConLoss(nn.Module):
         loss = loss.view(anchor_count, batch_size).mean()
 
         return loss
+'''
