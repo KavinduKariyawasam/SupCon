@@ -4,6 +4,12 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+def device_as(t1, t2):
+   """
+   Moves t1 to the device of t2
+   """
+   return t1.to(t2.device)
+   
 class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
    """
    Vanilla Contrastive loss, also called InfoNceLoss as in SimCLR paper
