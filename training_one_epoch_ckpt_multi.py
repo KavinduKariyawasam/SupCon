@@ -75,6 +75,8 @@ def train_OCT_multilabel(train_loader, model, classifier, criterion, optimizer, 
                 epoch, idx + 1, len(train_loader)))
             sys.stdout.flush()
 
+    print(label_list)
+    print(output_list)
     label_array = np.asarray(label_list)
     output_array = np.asarray(output_list)
     f = f1_score(label_array.astype(int),output_array.astype(int),average='macro')
