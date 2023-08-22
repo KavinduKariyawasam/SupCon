@@ -7,7 +7,7 @@ class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
    """
    Vanilla Contrastive loss, also called InfoNceLoss as in SimCLR paper
    """
-   def __init__(self, batch_size, temperature=0.5):
+   def __init__(self,device='cuda:0', temperature=0.07, contrast_mode='all', base_temperature=0.07):
        super().__init__()
        self.batch_size = batch_size
        self.temperature = temperature
