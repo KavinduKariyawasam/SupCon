@@ -50,7 +50,7 @@ class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
        denominator = device_as(mask, similarity_matrix) * torch.exp(similarity_matrix / self.temperature)
 
        all_losses = -torch.log(nominator / torch.sum(denominator, dim=1))
-       loss = torch.sum(all_losses) / (2 * self.batch_size)
+       loss = torch.sum(all_losses) / (2 * batch_size)
        return loss
 '''
 class SupConLoss(nn.Module):
