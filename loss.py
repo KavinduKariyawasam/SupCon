@@ -8,9 +8,11 @@ class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
    Vanilla Contrastive loss, also called InfoNceLoss as in SimCLR paper
    """
    def __init__(self,device='cuda:0', temperature=0.07, contrast_mode='all', base_temperature=0.07):
-       super().__init__()
-       self.batch_size = batch_size
+       super(SupConLoss, self).__init__()
        self.temperature = temperature
+       self.contrast_mode = contrast_mode
+       self.base_temperature = base_temperature
+       self.device = device
        self.mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()
 
    def calc_similarity_batch(self, a, b):
