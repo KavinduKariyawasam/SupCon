@@ -25,7 +25,7 @@ class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
        where corresponding indices are pairs
        z_i, z_j in the SimCLR paper
        """
-       batch_size = feature.shape[0]
+       batch_size = features.shape[0]
        proj_1, proj_2 = torch.unbind(features, dim=1)
        mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()  
        z_i = F.normalize(proj_1, p=2, dim=1)
