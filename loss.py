@@ -13,7 +13,7 @@ class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
        self.contrast_mode = contrast_mode
        self.base_temperature = base_temperature
        self.device = device
-       self.mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()
+       #self.mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()    
 
    def calc_similarity_batch(self, a, b):
        representations = torch.cat([a, b], dim=0)
@@ -27,7 +27,7 @@ class SupConLoss(nn.Module):         #Contrastive loss with SimCLR
        """
        batch_size = feature.shape[0]
        proj_1, proj_2 = torch.unbind(features, dim=1)
-       
+       mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()  
        z_i = F.normalize(proj_1, p=2, dim=1)
        z_j = F.normalize(proj_2, p=2, dim=1)
 
